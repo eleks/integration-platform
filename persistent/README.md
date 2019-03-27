@@ -1,0 +1,1 @@
+this folder mounted to each component and contains configuration and artifact deploy instructions

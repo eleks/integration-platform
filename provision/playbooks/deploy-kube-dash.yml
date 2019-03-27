@@ -1,0 +1,6 @@
+---
+- name: Deploy Kube Dash
+  hosts: role=controller
+  become: yes
+  roles:
+    - kube-dash

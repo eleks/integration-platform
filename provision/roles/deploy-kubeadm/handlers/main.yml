@@ -1,0 +1,21 @@
+---
+- name: Restart server
+  command: 'sleep 1 && shutdown -r now "Reboot triggered by Ansible" && sleep 1'
+  async: 1
+  poll: 0
+  ignore_errors: true
+  become: true
+
+- name: Wait for server to restart
+  local_action:
+    module: wait_for
+      host={{ inventory_hostname }}
+      port=22
+      delay=10
+    become: false
+
+- name: Restart kubelet
+  systemd:
+    name: kubelet
+    state: restarted
+  become: true

@@ -1,0 +1,21 @@
+---
+
+local:
+  ip: "${(NetworkInterface.getNetworkInterfaces().toList().collectMany{ it.getInetAddresses().findAll{it instanceof Inet4Address} }.find{ !(it.getHostAddress() =~ '127[.]0[.]0[.]1|192[.]168[.].*') } ?: InetAddress.getLocalHost()).getHostAddress() }"
+
+## the parameters of current server known for external users / browsers / servers
+# as result we have (example for bps):
+# bps:
+#   host: xxx
+#   port:
+#     https: yyy
+role: ${ roles[env.ROLE.toLowerCase()] }
+
+# 
+log4j:
+  DEBUG: "${env.DEBUG ?: 'false'}"
+
+# Ports offset. This entry will set the value of the ports defined below to the define value + Offset.
+# e.g. Offset=2 and HTTPS port=9443 will set the effective HTTPS port to 9445
+carbon:
+  HideAdminServiceWSDLs: false

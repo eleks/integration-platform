@@ -1,0 +1,8 @@
+---
+- include: deploy-kubernetes.yml
+  when: kubeadm
+
+#- include: playbooks/deploy-integration-platform.yml
+
+# Make kubectl working from bastion
+- include: playbooks/k8s-bastion.yml

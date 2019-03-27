@@ -1,0 +1,35 @@
+---
+#roles:
+#  api:
+#    host: ${cloud.dns}
+#    port:
+#      ## worker external ports
+#      https: "8243"
+#      http: "8280"
+#      ## management external port
+#      mhttps: "9443"
+
+
+
+## let's evaluate roles from terraform output
+# as result we have:
+# roles:
+#   api:
+#     host: xxx
+#     service: xxx
+#     port:
+#       https: yyy
+roles: |-
+  ${
+    cloud.hosts.collectEntries{role,host->
+      [
+        role,[
+            'host': host,
+            'service': role+'.'+cloud.domain,
+            'port': cloud.ports[role].collectEntries{pname,plist->
+                [pname,(plist+' \t \t \t').split(' ')[2].trim()]
+            }.findAll{k,v->v}
+        ]
+      ]
+    } 
+  }

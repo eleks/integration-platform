@@ -1,0 +1,6 @@
+---
+- name: Deploy Kubernetes
+  hosts: all
+  become: yes
+  roles:
+    - deploy-kubeadm

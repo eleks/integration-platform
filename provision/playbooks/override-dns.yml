@@ -1,0 +1,33 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: override dhcp dns
+    command: sed -i 's/PEERDNS="yes"/PEERDNS="no"/g' /etc/sysconfig/network-scripts/ifcfg-eth0
+  
+
+  - stat: path=/etc/resolv.conf
+    register: resolvconf
+
+  - debug: var=resolvconf
+
+  - name: clear dns
+    file:
+      state: absent
+      path: /etc/resolv.conf
+    when: resolvconf.stat.exists
+  
+  - name: clear dns
+    file:
+      state: touch
+      path: /etc/resolv.conf
+      
+
+  - name: fill resolv.conf
+    blockinfile:
+      path: /etc/resolv.conf
+      block: |
+        search {{ domain_name }}
+        nameserver {{ dns_ip }}
+        

@@ -1,0 +1,12 @@
+.git
+/.ssh/*
+.terraform
+terraform.tfstate.d
+.vscode
+*.secvars
+*.tar
+helpers/ssl
+
+!.gitignore
+!/.ssh/README.md
+*.tfvars

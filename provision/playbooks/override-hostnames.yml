@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: override hostnames
+    command: hostnamectl set-hostname {{ inventory_hostname }}
+  
+  - name: remove unfinished transactions
+    command: yum-complete-transaction --cleanup-only

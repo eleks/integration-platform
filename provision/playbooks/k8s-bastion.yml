@@ -1,0 +1,38 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  tasks:
+  - name: set kubernetes repo
+    shell:
+      cmd: |
+        cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+        [kubernetes]
+        name=Kubernetes
+        baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+        enabled=1
+        gpgcheck=1
+        repo_gpgcheck=1
+        gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+        EOF
+
+  - name: install kubectl
+    yum: 
+      name: kubectl
+      state: latest
+  
+  - name: create kubeconfig folder
+    file:
+      path: /home/{{ ansible_user }}/.kube
+      state: directory
+    become: no
+    
+- hosts: role=controller
+  gather_facts: yes
+  become: yes
+  tasks:
+  - name: Fetch kubeconfig from master
+    fetch: 
+      src: /etc/kubernetes/admin.conf
+      dest: /home/{{ ansible_user }}/.kube/config
+      flat: yes
