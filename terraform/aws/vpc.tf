@@ -1,6 +1,6 @@
-#--------------------------------------------------------
-#--Create new VPC with Private and Public Subnets
-#--------------------------------------------------------
+#------------------------------------------------------------------
+#--Create new Virtual Private Cloud with Private and Public Subnets
+#------------------------------------------------------------------
 resource "aws_vpc" "eleksintegration" {
   cidr_block = "${local.config["aws_cidr"]}"
 

@@ -1,6 +1,6 @@
-#--------------------------------------------------------
-#--Get available az names in region
-#--------------------------------------------------------
+#-----------------------------------------------------------------
+#--Get available az names in region and Amazon Machine Images data
+#-----------------------------------------------------------------
 data "aws_availability_zones" "available" {}
 data "aws_ami" "centos_ami" {
   most_recent      = true

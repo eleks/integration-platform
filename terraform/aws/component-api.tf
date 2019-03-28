@@ -27,8 +27,6 @@ module "port-api-mhttps" {
   port            = "mhttps"
   ports           = "${local.component_ports["api"]}"
   params          = "${local.default_expose_port_params}"
-  ## wait for bastion initialization
-  #depends_on = ["${kubernetes_persistent_volume_claim.nfs-claim.metadata.0.uid}"]
 }
 
 module "port-api-mhttp" {
@@ -37,8 +35,6 @@ module "port-api-mhttp" {
   port            = "mhttp"
   ports           = "${local.component_ports["api"]}"
   params          = "${local.default_expose_port_params}"
-  ## wait for bastion initialization
-  #depends_on = ["${kubernetes_persistent_volume_claim.nfs-claim.metadata.0.uid}"]
 }
 
 
@@ -48,8 +44,6 @@ module "port-api-https" {
   port            = "https"
   ports           = "${local.component_ports["api"]}"
   params          = "${local.default_expose_port_params}"
-  ## wait for bastion initialization
-  #depends_on = ["${kubernetes_persistent_volume_claim.nfs-claim.metadata.0.uid}"]
 }
 
 module "port-api-http" {
@@ -58,8 +52,6 @@ module "port-api-http" {
   port            = "http"
   ports           = "${local.component_ports["api"]}"
   params          = "${local.default_expose_port_params}"
-  ## wait for bastion initialization
-  #depends_on = ["${kubernetes_persistent_volume_claim.nfs-claim.metadata.0.uid}"]
 }
 
 

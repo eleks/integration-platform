@@ -1,6 +1,10 @@
 #--------------------------------------------------------
 #--Bastion host
 #--------------------------------------------------------
+output "bastion_public_ip" {
+  value = "${aws_instance.bastion.*.public_ip}"
+}
+
 resource "aws_instance" "bastion" {
   count                  = "${local.config["bastion_enabled"] ? 1 : 0}"
 

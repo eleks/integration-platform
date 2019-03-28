@@ -10,10 +10,15 @@ localhost                      # some wso2 services need this
 192.168.99.100                 # default ip address for docker in virtualbox
 *.docker.local                 # docker-compose env  
 *.default.svc.cluster.local    # kubernetes default domain
-*.elb.us-west-1.amazonaws.com  # default auto-generated public host name for aws us-west-1
+# default auto-generated public host name for some aws zones
+*.eu-west-1.elb.amazonaws.com  
+*.eu-west-2.elb.amazonaws.com
+*.eu-west-3.elb.amazonaws.com
+*.us-east-1.elb.amazonaws.com
+*.us-east-2.elb.amazonaws.com
+*.us-west-1.elb.amazonaws.com
+*.us-west-2.elb.amazonaws.com
 ```
-
-If you have different dynamic hostname or maybe you have own domain name follow the instructions to generate new certificate.
 
 
 ## goal
