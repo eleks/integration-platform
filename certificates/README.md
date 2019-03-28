@@ -2,15 +2,15 @@ This section describes how to create trusted certificates for wso2 components.
 
 To minimize initial efforts we assume that our cloud provides as minimum one public dynamic DNS like: AAAA-XXXXXXXXXXXXXXXX.elb.us-west-1.amazonaws.com
 
-So, we have created a wildcard certificate for `*.us-west-1.elb.amazonaws.com` that signed with custom CA certificate 
+We have created a wildcard certificate for `*.us-west-1.elb.amazonaws.com` that signed with custom CA certificate 
 that also has the following domains as alternatives: 
 
 ```shell
-localhost                     # some wso2 services need this
-# the following used for service-to-service communication inside container-manager
-*.docker.local                # docker-compose env  
-*.kubernetes.local            # kubernetes env   TODO:???
-# other common cloud auto-generated hosts
+localhost                      # some wso2 services need this
+192.168.99.100                 # default ip address for docker in virtualbox
+*.docker.local                 # docker-compose env  
+*.default.svc.cluster.local    # kubernetes default domain
+*.elb.us-west-1.amazonaws.com  # default auto-generated public host name for aws us-west-1
 ```
 
 If you have different dynamic hostname or maybe you have own domain name follow the instructions to generate new certificate.
