@@ -24,15 +24,15 @@ go into the project root directory and generate the deployer-key and public ssh 
 
 or put into `.ssh` folder your own key and public part for it
 
-```
+```shell
 ssh-keygen -t rsa -f ./.ssh/deployer-key
 ```
 
 This key you could use to connect bastion server 
 
 ## 2. Define AWS credentials
-Create file `1.auto.tfvars` with content:
-```
+Create file `terraform/aws/1.auto.tfvars` with content:
+```shell
 aws_access_key = "Here put your access_key"
 aws_secret_key = "Here put your secret_key"
 ## the following key will be used as a token to access kubernetes. change it.
@@ -42,19 +42,19 @@ Actually the file should match `*.auto.tfvars` to be loaded automatically.
 
 ## 3. Create terraform workspace (dev/stage/prod)
 go into the directory `terraform/aws`
-```
+```shell
 cd terraform/aws
 terraform workspace new dev
 ```
 
 ## 4. Initialize terraform
 The following command verifies your `*.tf` configuration and initializes your workspace according to it.
-```
+```shell
 terraform init
 ```
 ## 5. Deploy Integration Platform
 This command compares local configuration with current state and suggests changes to be applied. Type `yes` when asked.
-```
+```shell
 terraform apply
 ```
   
