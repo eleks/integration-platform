@@ -30,14 +30,7 @@ ssh-keygen -t rsa -f ./.ssh/deployer-key
 
 This key you could use to connect bastion server 
 
-## 2. Create terraform workspace (dev/stage/prod)
-go into the directory `terraform/aws`
-```
-cd terraform/aws
-terraform workspace new dev
-```
-
-## 3. Define AWS credentials
+## 2. Define AWS credentials
 Create file `1.auto.tfvars` with content:
 ```
 aws_access_key = "Here put your access_key"
@@ -46,6 +39,13 @@ aws_secret_key = "Here put your secret_key"
 deployer_token = "1234567890-1234567890-1234567890-1234567890"
 ```  
 Actually the file should match `*.auto.tfvars` to be loaded automatically.
+
+## 3. Create terraform workspace (dev/stage/prod)
+go into the directory `terraform/aws`
+```
+cd terraform/aws
+terraform workspace new dev
+```
 
 ## 4. Initialize terraform
 The following command verifies your `*.tf` configuration and initializes your workspace according to it.
