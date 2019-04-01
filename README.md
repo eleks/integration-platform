@@ -1,4 +1,11 @@
 # Integration Platform automation on AWS
+
+## Video Introduction:
+
+* **Infrastructure as a Code:** https://www.useloom.com/share/9a4ad4da7b314f34988c533d838b36f7
+
+
+
 ## Infrastructure Overview  
 ![architecture](assets/integration-platform.jpg)
 
