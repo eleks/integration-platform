@@ -3,16 +3,6 @@
 #-- this will be mount to dockers for auto-initialization
 #----------------------------------------------------------------------------
 
-# process template to write 00-cloud.yaml
-data "template_file" "00-cloud-yaml" {
-  template = "${file("${local.root}/persistent/.cloud/00-cloud.yaml.tft")}"
-  vars {
-    public_host_name  = "${aws_lb.frontend.dns_name}"
-    domain            = "default.svc.cluster.local"
-    component_ports   = "${jsonencode(local.component_ports)}"
-    component_hosts   = "${jsonencode(data.null_data_source.component_hosts.outputs)}"
-  }
-}
 # zip 
 data "archive_file" "persistent-zip" {
   type        = "zip"
@@ -49,10 +39,33 @@ resource "null_resource" "bastion-nfs" {
     ]
   }
     
+  depends_on = ["aws_instance.bastion"]
+}
+
+# process template to write 00-cloud.yaml
+# it required inside docker containers to do correct ititialization
+data "template_file" "00-cloud-yaml" {
+  template = "${file("${local.root}/persistent/.cloud/00-cloud.yaml.tft")}"
+  vars {
+    public_host_name  = "${aws_lb.frontend.dns_name}"
+    domain            = "default.svc.cluster.local"
+    component_ports   = "${jsonencode(local.component_ports)}"
+    component_hosts   = "${jsonencode(data.null_data_source.component_hosts.outputs)}"
+  }
+}
+
+resource "null_resource" "00-cloud-yaml" {
+  connection {
+    type        = "ssh"
+    host        = "${aws_instance.bastion.public_ip}"
+    user        = "${local.config["username"]}"
+    private_key = "${file("${local.config["key_path_local"]}${local.config["key_name"]}")}"
+  }
+
   #write previously prepared template to a remote file
   provisioner "file" "00-cloud-yaml" {
     content     = "${data.template_file.00-cloud-yaml.rendered}"
     destination = "/var/nfs/persistent/.cloud/00-cloud.yaml"
   }
-  depends_on = ["aws_instance.bastion"]
+  depends_on = ["null_resource.bastion-nfs"]
 }

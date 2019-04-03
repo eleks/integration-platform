@@ -28,7 +28,6 @@ locals {
 
       dev = {
           # Development environment
-          env                   = "dev"
           domain                = "eleksintegration.com"
           k8s_master_count      = 1
           k8s_worker_count      = 2
@@ -40,5 +39,5 @@ locals {
   }
 
   config    = "${merge(local.configs["defaults"], local.configs[terraform.workspace])}"
-  env       = "${local.config["env"]}"
+  env       = "${terraform.workspace}"
 }

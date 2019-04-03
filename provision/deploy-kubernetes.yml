@@ -4,10 +4,12 @@
 - include: playbooks/override-hostnames.yml
 
 - include: playbooks/deploy-kubeadm.yml
-  when: kubeadm
+#  when: kubeadm
 
 - include: playbooks/deploy-kube-dash.yml
-  when: kubeadm
+#  when: kubeadm
 
 - include: playbooks/kube-additional.yml
-  when: kubeadm
+#  when: kubeadm
+
+- include: playbooks/k8s-bastion.yml

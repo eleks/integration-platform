@@ -33,7 +33,7 @@ resource "kubernetes_persistent_volume" "nfs-volume" {
       }
     }
   }
-  depends_on = ["null_resource.bastion-init"]
+  depends_on = ["null_resource.k8s-init-master"]
 }
 resource "kubernetes_persistent_volume_claim" "nfs-claim" {
   metadata {

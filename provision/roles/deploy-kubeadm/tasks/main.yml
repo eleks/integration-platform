@@ -117,7 +117,8 @@
 
 - name: delay for join nodes
   pause: 
-    minutes: 1
+    seconds: 15
+    ## minutes: 1
 
 #- name: fix coredns bug
 #  when: inventory_hostname in groups["role=controller"]
@@ -146,7 +147,8 @@
 
 - name: delay after kube-apiserver modifications
   pause: 
-    minutes: 1
+    seconds: 15
+    ## minutes: 1
 
 - name: rbac for predifined user
   when: inventory_hostname in groups["role=controller"]

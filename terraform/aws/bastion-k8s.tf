@@ -11,20 +11,6 @@ data "template_file" "datacenter_env" {
     worker_count = "${local.config["k8s_worker_count"]}"
   }
 }
-/*
-# process template for kubeadm
-data "template_file" "kubeadm_main" {
-  template = "${file("${local.root}/provision/roles/deploy-kubeadm/tasks/main.yml.tmpl")}"
-  vars {
-    elb_dns = "${aws_lb.frontend.dns_name}"
-  }
-  depends_on = ["aws_lb.frontend"]
-}
-resource "local_file" "kubeadm_main" {
-    content     = "${data.template_file.kubeadm_main.rendered}"
-    filename = "${local.root}/provision/roles/deploy-kubeadm/tasks/main.yml"
-}
-*/
 # process template to generate datacenter_env
 data "archive_file" "provision-zip" {
   type        = "zip"
@@ -35,7 +21,7 @@ data "archive_file" "provision-zip" {
 #----------------------------------------------------------------------------
 #--Prepare ansible for provision
 #----------------------------------------------------------------------------
-resource "null_resource" "bastion-init" {
+resource "null_resource" "k8s-init-master" {
   connection {
     type        = "ssh"
     host        = "${aws_instance.bastion.public_ip}"
@@ -73,12 +59,29 @@ resource "null_resource" "bastion-init" {
     destination = "/home/${local.config["username"]}/provision/inventory/datacenter_env"
   }
 
-  provisioner "remote-exec" "start" {
+  provisioner "remote-exec" "k8s-init-master" {
     inline = [
-      "cd provision && ansible-playbook integration-platform.yml -v --extra-vars '{\"local_env\":\"${local.env}\", \"deployer_token\":\"${var.deployer_token}\", \"elb_dns\":\"${aws_lb.frontend.dns_name}\", \"bastion_fqdn\":\"${aws_route53_record.bastion.fqdn}\"}' --private-key ${local.config["key_path_remote"]}${local.config["key_name"]}"
+      "cd provision && ansible-playbook deploy-kubernetes.yml -vvv --extra-vars '{\"local_env\":\"${local.env}\", \"deployer_token\":\"${var.deployer_token}\", \"elb_dns\":\"${aws_lb.frontend.dns_name}\", \"bastion_fqdn\":\"${aws_route53_record.bastion.fqdn}\"}' --private-key ${local.config["key_path_remote"]}${local.config["key_name"]}"
     ]
   }
-
   depends_on = ["aws_instance.bastion", "null_resource.bastion-nfs"]
 }
 
+/*
+resource "null_resource" "k8s-init-worker" {
+  ## count = "${ length(aws_instance.worker.*.id) }"
+  count = "${local.config["k8s_worker_count"]}"
+  connection {
+    type        = "ssh"
+    host        = "${aws_instance.bastion.public_ip}"
+    user        = "${local.config["username"]}"
+    private_key = "${file("${local.config["key_path_local"]}${local.config["key_name"]}")}"
+  }
+  provisioner "remote-exec" "k8s-init-worker" {
+    inline = [
+      "cd provision && ansible-playbook deploy-kubernetes.yml -v -i '${local.env}-worker-0${count.index+1},' --extra-vars '{\"local_env\":\"${local.env}\", \"deployer_token\":\"${var.deployer_token}\", \"elb_dns\":\"${aws_lb.frontend.dns_name}\", \"bastion_fqdn\":\"${aws_route53_record.bastion.fqdn}\"}' --private-key ${local.config["key_path_remote"]}${local.config["key_name"]}"
+    ]
+  }
+  depends_on = ["null_resource.k8s-init-master"]
+}
+*/
