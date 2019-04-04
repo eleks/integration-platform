@@ -10,6 +10,9 @@ variable "ports" {
 }
 variable "name"  {}
 variable "port"  {} # port name from ports map 
+variable "target_protocol"  {
+  default = "HTTP"
+}
 # variable to implement depends-on values. not used inside module...
 variable "depends_on"{ default = [], type = "list"}
 
@@ -49,7 +52,7 @@ resource "aws_lb_target_group" "target" {
 
   deregistration_delay = 30
   port                 = "${ local.target_port }"
-  protocol             = "HTTP"
+  protocol             = "${ var.target_protocol }"
   slow_start           = 30
   target_type          = "ip"
   vpc_id               = "${ var.params["vpc_id"] }"
@@ -58,7 +61,7 @@ resource "aws_lb_target_group" "target" {
     healthy_threshold   = 3
     matcher             = "200-399"
     path                = ""
-    protocol            = "HTTP"
+    protocol            = "${ var.target_protocol }"
     timeout             = 5
     unhealthy_threshold = 3
   }
