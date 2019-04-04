@@ -18,11 +18,6 @@ resource "null_resource" "bastion-nfs" {
     private_key = "${file("${local.config["key_path_local"]}${local.config["key_name"]}")}"
   }
 
-  provisioner "file" "persistent-zip" {
-    source        = "${local.work}/persistent.zip"
-    destination   = "/home/${local.config["username"]}/persistent.zip"
-  }
-
   provisioner "remote-exec" {
     inline = [
       "sudo yum -y -q install nfs-utils unzip && sudo systemctl enable nfs-server.service && sudo systemctl start nfs-server.service",
@@ -31,11 +26,7 @@ resource "null_resource" "bastion-nfs" {
       "sudo chown centos:adm /var/nfs", # WAS: nfsnobody:nfsnobody NOTE: current user must have privelegies to write this folder to use file provisionef simpler!
       "sudo chmod 775 /var/nfs",
       "sudo echo '/var/nfs        *(rw,sync,no_subtree_check)' >> /etc/exports",
-      "sudo exportfs -a",
-      "rm -rf /var/nfs/persistent",
-      "unzip /home/${local.config["username"]}/persistent.zip -d /var/nfs/persistent",
-      "rm -f /home/${local.config["username"]}/persistent.zip",
-      "find /var/nfs/persistent -name *.tft -delete"
+      "sudo exportfs -a"
     ]
   }
     
@@ -53,13 +44,27 @@ data "template_file" "00-cloud-yaml" {
     component_hosts   = "${jsonencode(data.null_data_source.component_hosts.outputs)}"
   }
 }
-
-resource "null_resource" "00-cloud-yaml" {
+## re-create persistent storage
+resource "null_resource" "persistent" {
   connection {
     type        = "ssh"
     host        = "${aws_instance.bastion.public_ip}"
     user        = "${local.config["username"]}"
     private_key = "${file("${local.config["key_path_local"]}${local.config["key_name"]}")}"
+  }
+
+  provisioner "file" "persistent-zip" {
+    source        = "${local.work}/persistent.zip"
+    destination   = "/home/${local.config["username"]}/persistent.zip"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "rm -rf /var/nfs/persistent",
+      "unzip /home/${local.config["username"]}/persistent.zip -d /var/nfs/persistent",
+      "rm -f /home/${local.config["username"]}/persistent.zip",
+      "find /var/nfs/persistent -name *.tft -delete"
+    ]
   }
 
   #write previously prepared template to a remote file
