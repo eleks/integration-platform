@@ -15,6 +15,9 @@ variable "ports"     {
   type = "map"
   default = {}
 }
+variable "persistent_root" {
+  default = "/opt/persistent"
+}
 # variable just to implement depends-on values
 variable "depends_on"{ default = [], type = "list"}
 
@@ -78,7 +81,7 @@ resource "kubernetes_deployment" "component-deploy" {
           }
           env {
             name  = "PERSISTENT_ROOT"
-            value = "/opt/persistent"
+            value = "${var.persistent_root}"
           }
           volume_mount {
             name      = "mnt-volume"
