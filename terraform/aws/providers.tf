@@ -13,7 +13,7 @@ provider "aws" {
 
 provider "kubernetes" {
   host  = "https://${module.kub.hostname}:6443"
-  token = "${var.kubeapi_token}"
+  token = "${module.kub.kubeapi_token}"
 }
 
 #  "random" (2.1.1)...
