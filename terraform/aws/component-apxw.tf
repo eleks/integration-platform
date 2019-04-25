@@ -1,7 +1,8 @@
-## define api master component
+## API manager analytiX Worker definition 
+## To collect statistics about api manager
 
 module "apxw" {
-  source    = "../component-wso2"
+  source    = "github.com/eleks/terraform-kubernetes-demo/kub-component-java-base"
 
   name      = "apxw"
   namespace = "default"
@@ -14,7 +15,6 @@ module "apxw" {
   cpu_min   = "0.5"
   cpu_max   = "1"
   ports     = "${local.component_ports["apxw"]}"
-  ## wait for bastion initialization
-  depends_on = ["${kubernetes_persistent_volume_claim.nfs-claim.metadata.0.uid}"]
+  ## wait for kubernetes and persistent ready
+  depends_on = ["${module.kub.ready}", "${module.persistent.ready}"]
 }
-

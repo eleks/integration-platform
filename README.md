@@ -1,13 +1,11 @@
-# Integration Platform automation on AWS
+# Integration Platform demo on AWS
 
-## Video Introduction:
+This demo project based on terraform modules published here: https://github.com/eleks/terraform-kubernetes-demo
 
-* **Infrastructure as a Code:** https://www.useloom.com/share/9a4ad4da7b314f34988c533d838b36f7
-
-
+So, for details please reffer this parent project.
 
 ## Infrastructure Overview  
-![architecture](assets/integration-platform.jpg)
+![architecture](assets/integration-platform.png)
 
 
 **NOTE:** the following instruction works under linux and windows
@@ -32,7 +30,7 @@ go into the project root directory and generate the deployer-key and public ssh 
 or put into `.ssh` folder your own key and public part for it
 
 ```shell
-ssh-keygen -t rsa -f ./.ssh/deployer-key
+ssh-keygen -t rsa -f ~/.ssh/deployer-key
 ```
 
 This key you could use to connect bastion server 
@@ -42,20 +40,18 @@ Create file `terraform/aws/1.auto.tfvars` with content:
 ```shell
 aws_access_key = "Here put your access_key"
 aws_secret_key = "Here put your secret_key"
-## the following key will be used as a token to access kubernetes. change it.
-deployer_token = "1234567890-1234567890-1234567890-1234567890"
-```  
+```
 Actually the file should match `*.auto.tfvars` to be loaded automatically.
 
-## 3. Create terraform workspace (dev/stage/prod)
+## 3. Create terraform workspace
 go into the directory `terraform/aws`
 ```shell
 cd terraform/aws
-terraform workspace new dev
+terraform workspace new api-demo
 ```
 
 ## 4. Initialize terraform
-The following command verifies your `*.tf` configuration and initializes your workspace according to it.
+The following command verifies your `*.tf` configuration and downloads providers and modules required.
 ```shell
 terraform init
 ```
@@ -65,11 +61,11 @@ This command compares local configuration with current state and suggests change
 terraform apply
 ```
   
-## 6. Certificate  
+## 6. Certificate (Important)
 
 We are using self-signed certificate  for Application LoadBalancer.
 It is signed with custom CA certificate. So, to make server certificate valid for your brawser/mobile import the following file into the truststore:
 
-`certificates/ca.docker.local.cer`
+[ca.docker.local.cer](https://github.com/eleks/terraform-kubernetes-demo/blob/master/certificates/ca.docker.local.cer)
 
-details in [certificates/README.md](./certificates/README.md)
+Find details here: [certificates/README.md](https://github.com/eleks/terraform-kubernetes-demo/blob/master/certificates/README.md)

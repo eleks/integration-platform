@@ -1,5 +1,0 @@
----
-- include: kubeflow_install.yml
-  when: kubeflow_enable
-  tags:
-    - kubeflow

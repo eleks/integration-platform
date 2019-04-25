@@ -2,7 +2,7 @@ folder for configs.
 
 better to use yaml, however you can use properties or json formats.
 
-all config files loaded in an aphabetical order without subfilders.
+all config files loaded in an aphabetical order without subfolders.
 
 in values you can define groovy expressions:
 

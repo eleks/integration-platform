@@ -1,6 +1,0 @@
----
-- name: Deploy DNS
-  hosts: role=controller
-  become: yes
-  roles:
-    - kube-additional

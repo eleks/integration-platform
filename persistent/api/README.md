@@ -5,3 +5,8 @@
  for example files from `./repository/conf/*` will go to `/opt/productname/repository/conf/*`
 
 - `templates` the folder similar to artifacts, but contains only files native for wso2 server
+
+
+actually you can put together `artifacts` and `templates`. we just suggest to split development artifacts from configurations and libraries that belongs to platform.
+
+Note: all `*.gsp` files precessed as groovy templates inside docker images.

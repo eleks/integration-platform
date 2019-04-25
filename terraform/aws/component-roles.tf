@@ -2,14 +2,9 @@
 # predefine hosts ports here to use in confgs
 #--------------------------------------------------------------------------------
 
-#locals {
-#  component_hosts = {
-#    api = "${aws_lb.frontend.dns_name}"
-#  }
-#}
 data "null_data_source" "component_hosts" {
   inputs = {
-    api  = "${aws_lb.frontend.dns_name}"
+    api  = "${module.kub.hostname}"
     apxw = "internal-only"                         # actually we are not publishing this server on public LB
   }
 }
