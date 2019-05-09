@@ -19,7 +19,7 @@ Download <a href="https://wso2.com/api-management/tooling/">apimcli</a>
 <hr/>
 <b>apimcli-add-env.bat (windows):</b>
 <pre>
-set ENV=dev
+set ENV=<%= cloud.workspace %>
 set HOST=<%= role.host %>
 set PORTM=<%= role.port.mhttps %>
 set PORTW=<%= role.port.https %>
@@ -40,7 +40,7 @@ apimcli %PARM%
 <h3>export api:</h3>
 <hr/>
 <pre>
-apimcli.exe export-api -n APINAME -v APIVERSION -r PUBLISHER -e dev -u admin -p admin --insecure --verbose
+apimcli.exe export-api -n APINAME -v APIVERSION -r PUBLISHER -e <%= cloud.workspace %> -u admin -p admin --insecure --verbose
 </pre>
 <hr/>
 </body>

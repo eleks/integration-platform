@@ -11,6 +11,7 @@ module "persistent" {
     domain            = "default.svc.cluster.local"
     component_ports   = "${jsonencode(local.component_ports)}"
     component_hosts   = "${jsonencode(data.null_data_source.component_hosts.outputs)}"
+    workspace         = "${terraform.workspace}"
   }
   depends_on = ["${module.kub.ready}"]
 }

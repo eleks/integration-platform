@@ -1,6 +1,7 @@
 ---
 cloud:
   ## NOTE: evaluated from terraform
+  workspace: ${workspace}
   dns: ${public_host_name}
   domain: ${domain}
   hosts: ${component_hosts}
