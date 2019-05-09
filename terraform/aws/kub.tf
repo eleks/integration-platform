@@ -15,6 +15,8 @@ module "kub" {
   certificate_key  = "${module.default-certs.key}"
   certificate_body = "${module.default-certs.crt}"
 
+  image_filter_name = "CentOS Linux 7 x86_64 HVM EBS ENA 1805*" #"CentOS 7.5 Base Image"
+
   bastion_post_init=[
     ## "sudo yum install -y -q ..."
   ]
