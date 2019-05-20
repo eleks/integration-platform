@@ -4,6 +4,8 @@ This demo project based on terraform modules published here: https://github.com/
 
 So, for details please reffer this parent project.
 
+Screencast: https://www.youtube.com/watch?v=cbrwnMNKjC4
+
 ## Infrastructure Overview  
 ![architecture](assets/integration-platform.png)
 
